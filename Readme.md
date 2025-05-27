@@ -19,3 +19,4 @@ Important points:
 8. Error Handling - send email if something fails.
 9. Parameterise wherever encessary.
 10. Restricted Access - Best Security principles.
+11. Create Azure Data Factory instances for Ingestion process
