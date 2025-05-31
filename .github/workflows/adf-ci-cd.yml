@@ -22,8 +22,8 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         scope: resourcegroup
-        subscriptionId: <your-subscription-id>
-        resourceGroupName: <your-prod-resource-group>
+        subscriptionId: 96e5be72-750f-49d5-82bd-bc5cb9e689a2
+        resourceGroupName: prodresource889
         template: ./arm/ARMTemplateForFactory.json
         parameters: ./arm/ARMTemplateParametersForFactory.json
         deploymentName: adf-prod-deployment
