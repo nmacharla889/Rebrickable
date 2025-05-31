@@ -1,0 +1,37 @@
+name: ADF CI/CD
+
+on:
+  push:
+    branches:
+      - main  # Or your default branch
+
+jobs:
+  build-and-export:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: 📦 Install ADF Utility
+        run: npm install @microsoft/azure-data-factory-utilities
+
+      - name: ✅ Validate ADF code
+        run: |
+          node node_modules/@microsoft/azure-data-factory-utilities/lib/index validate ./data-factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}"
+
+      - name: 📤 Export ARM Template
+        run: |
+          mkdir -p arm-output
+          node node_modules/@microsoft/azure-data-factory-utilities/lib/index export ./data-factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}" ./arm-output
+
+      - name: 📁 Upload ARM template artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: adf-arm-template
+          path: ./arm-output
