@@ -31,7 +31,7 @@ jobs:
           node node_modules/@microsoft/azure-data-factory-utilities/lib/index export ./data-factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}" ./arm-output
 
       - name: 📁 Upload ARM template artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: adf-arm-template
           path: ./arm-output
