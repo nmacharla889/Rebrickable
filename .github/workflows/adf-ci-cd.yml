@@ -1,9 +1,9 @@
-name: ADF CI/CD 
+name: ADF CI/CD
 
 on:
   push:
     branches:
-      - main  # Or your default branch
+      - main
 
 jobs:
   build-and-export:
