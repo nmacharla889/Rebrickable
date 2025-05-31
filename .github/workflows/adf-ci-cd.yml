@@ -1,4 +1,4 @@
-name: 🚀 Deploy ADF to Production env
+name: 🚀 Deploy ADF to Production
 
 on:
   push:
