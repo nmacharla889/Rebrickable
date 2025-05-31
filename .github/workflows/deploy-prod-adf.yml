@@ -1,0 +1,30 @@
+name: Deploy ADF to Production
+on:
+  push:
+    branches:
+      - adf_publish
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: adf_publish
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy ARM Template to Prod ADF
+        uses: azure/arm-deploy@v2
+        with:
+          resourceGroupName: ${{ secrets.PROD_RESOURCE_GROUP }}
+          template: ARMTemplateForFactory.json
+          parameters: ARMTemplateParametersForFactory.json
+          deploymentName: adf-prod-deployment
+          additionalParameters: >
+            -factoryName ${{ secrets.PROD_ADF_NAME }}
+            -blob_storage_ls_connectionString ${{ secrets.PROD_BLOB_CONNECTION }}
+            -AzureKeyVault_ls_properties_typeProperties_baseUrl ${{ secrets.PROD_KEYVAULT_URL }}
