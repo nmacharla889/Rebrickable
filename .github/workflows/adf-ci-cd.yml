@@ -3,7 +3,7 @@ name: 🚀 Deploy ADF to Production
 on:
   push:
     branches:
-      - main  # or whichever branch you use to deploy
+      - adf_publish  # ✅ Trigger when you publish from ADF Studio
 
 jobs:
   deploy:
@@ -26,5 +26,6 @@ jobs:
         resourceGroupName: prodresource889
         template: ./arm/ARMTemplateForFactory.json
         parameters: ./arm/ARMTemplateParametersForFactory.json
+        parameters: factoryName=prodadf889  # ✅ This overrides the dev name
         deploymentName: adf-prod-deployment
         failOnStdErr: false
