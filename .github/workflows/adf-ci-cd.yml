@@ -1,37 +1,30 @@
-name: ADF CI/CD 
+name: 🚀 Deploy ADF to Production
 
 on:
   push:
     branches:
-      - main
+      - main  # or whichever branch you use to deploy
 
 jobs:
-  build-and-export:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
+    - name: 🔐 Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Install ADF Utility
-        run: npm install @microsoft/azure-data-factory-utilities
-
-      - name: Validate ADF
-        run: |
-          node node_modules/@microsoft/azure-data-factory-utilities/lib/index validate ./data-factory/factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}"
-
-      - name: Export ADF ARM Template
-        run: |
-          mkdir -p arm-output
-          node node_modules/@microsoft/azure-data-factory-utilities/lib/index export ./data-factory/factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}" ./arm-output
-
-      - name: Upload ARM template artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: adf-arm-template
-          path: ./arm-output
+    - name: 🚀 Deploy ADF ARM Template
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: <your-subscription-id>
+        resourceGroupName: <your-prod-resource-group>
+        template: ./arm/ARMTemplateForFactory.json
+        parameters: ./arm/ARMTemplateParametersForFactory.json
+        deploymentName: adf-prod-deployment
+        failOnStdErr: false
