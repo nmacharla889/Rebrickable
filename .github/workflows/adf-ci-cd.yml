@@ -23,12 +23,12 @@ jobs:
 
       - name: Validate ADF
         run: |
-          node node_modules/@microsoft/azure-data-factory-utilities/lib/index validate ./data-factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}"
+          node node_modules/@microsoft/azure-data-factory-utilities/lib/index validate ./data-factory/factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}"
 
       - name: Export ADF ARM Template
         run: |
           mkdir -p arm-output
-          node node_modules/@microsoft/azure-data-factory-utilities/lib/index export ./data-factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}" ./arm-output
+          node node_modules/@microsoft/azure-data-factory-utilities/lib/index export ./data-factory/factory/ "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ secrets.ADF_DEV_RG }}/providers/Microsoft.DataFactory/factories/${{ secrets.ADF_DEV_NAME }}" ./arm-output
 
       - name: Upload ARM template artifact
         uses: actions/upload-artifact@v4
